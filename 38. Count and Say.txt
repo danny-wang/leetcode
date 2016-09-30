@@ -1,0 +1,62 @@
+     //clear()，这个名字让很多人想当然地认为它会清除流的内容。 
+    //实际上，它并不清空任何内容，它只是重置了流的状态标志而已！
+    stream.clear();   
+     // 去掉下面这行注释，清空stringstream的缓冲，每次循环内存消耗将不再增加!
+     //stream.str("");      
+
+class Solution {
+public:
+    string countAndSay(int n) {
+        string medium="1";
+        if(n==1)
+            return "1";
+        for(int i=1;i<n;i++){
+            medium=convert(medium);
+        }
+        stringstream sstr;
+        sstr<<medium;
+        string a;
+        sstr>>a;
+        return a;
+
+    }
+    string convert(string n){
+        stringstream sstr;
+        sstr<<n;
+        string str;
+        sstr>>str;
+        cout<<"str="<<str<<endl;
+        sstr.str("");
+        auto iter=str.begin();
+        auto iter2=str.end();
+        int count1 =1;
+        string b="";
+        stringstream sstr3;
+
+        for(;iter!=iter2;iter++){
+            if(*iter!=*(iter+1)){
+                stringstream sstr2;
+                sstr2<<(*iter);
+                int a=0;
+                sstr2>>a;
+                cout<<"a="<<a<<endl;
+
+                sstr3<<count1;
+                sstr3<<a;
+
+                count1=1;
+            }
+            else{
+
+                count1++;
+
+
+            }
+        }
+        sstr3>>b;
+        cout<<"b="<<b<<endl;
+        cout<<"sstr"<<sstr3.str()<<endl;
+        return b;
+
+    }
+};

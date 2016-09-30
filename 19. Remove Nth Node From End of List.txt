@@ -1,0 +1,66 @@
+Given a linked list, remove the nth node from the end of list and return its head.
+For example,
+   Given linked list: 1->2->3->4->5, and n = 2.
+
+   After removing the second node from the end, the linked list becomes 1->2->3->5.
+
+Note:
+Given n will always be valid.
+Try to do this in one pass.
+首先，进行一次循环计算整个list有多少个元素。
+然后分情况考虑：
+0.list中只有一个元素
+1.删除最后一个元素
+2.删除第一个元素
+3.删除中间的元素
+
+更好的解法：依然是双指针思想，两个指针相隔n-1，每次两个指针向后一步，当后面一个指针没有后继了，前面一个指针就是要删除的节点。
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        int size=0;
+        ListNode *temp= head;
+        for(;temp->next!=NULL; temp=temp->next){
+            size++;
+        }
+        size++;
+        int real_num=size-n+1;
+        ListNode *temp2=head;
+        if(size==1){
+             ListNode *temp=NULL;
+             return temp;
+        }
+        if(n==size){
+            temp2=temp2->next;
+        }
+        else if(n==1){
+            ListNode *temp3=temp2;  
+            for(int i=1;i<size-1;i++){
+                temp3=temp3->next;
+            }
+                temp3->next=NULL;
+            
+        }
+        else {
+            ListNode *temp4=temp2;  
+            for(int i=1;i<real_num-1;i++){
+                temp4=temp4->next;
+             }
+             ListNode *temp3=temp4->next;
+             temp4->next=temp3->next;
+             delete temp3;
+        }
+        return temp2;
+        
+        
+    }
+};

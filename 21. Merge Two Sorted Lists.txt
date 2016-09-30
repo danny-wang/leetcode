@@ -1,0 +1,72 @@
+Merge two sorted linked lists and return it as a new list. The new list should be made by splicing together the nodes of the first two lists.
+
+
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        ListNode *iter_a=l1;
+        ListNode *iter_b=l2;
+        ListNode *head=new ListNode(-999);
+        ListNode *iter=new ListNode(-999);
+        
+        if(iter_a==NULL)
+            return iter_b;
+        if(iter_b==NULL)
+            return iter_a;
+      
+        while(iter_a!=NULL &&iter_b!=NULL){
+            if((*iter_a).val<=(*iter_b).val){
+                if(head->val==-999){
+                     (*head).val=(*iter_a).val;
+                     iter_a=iter_a->next;
+                     iter=head;
+                }
+                else{
+                    ListNode *node=new ListNode(0);
+                    node->val=iter_a->val;
+                    iter_a=iter_a->next;
+                    iter->next=node;
+                    iter=node;
+                }
+               
+            }
+            else{
+               if(head->val==-999){
+                     head->val=iter_b->val;
+                     iter_b=iter_b->next;
+                     iter=head;
+                }
+                else{
+                    ListNode *node=new ListNode(0);
+                    node->val=iter_b->val;
+                    iter_b=iter_b->next;
+                    iter->next=node;
+                    iter=node;
+                }
+            }
+            
+                
+        }
+        if(iter_a==NULL){
+            while(iter_b!=NULL){
+                   ListNode *node=new ListNode(0); 
+                    node->val=iter_b->val;
+                    iter_b=iter_b->next;
+                    iter->next=node;
+                    iter=node;
+            }
+        }
+        if(iter_b==NULL){
+            while(iter_a!=NULL){
+                    ListNode *node=new ListNode(0);
+                    node->val=iter_a->val;
+                    
+                    iter_a=iter_a->next;
+                    iter->next=node;
+                    iter=node;
+            }
+        }
+        return head;
+    }
+};
+

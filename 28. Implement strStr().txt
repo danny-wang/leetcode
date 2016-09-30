@@ -1,0 +1,22 @@
+Implement strStr().
+Returns the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
+
+当前的brute force的实现是非常直截了当的。我们从haystack的起始位置扫描needle，并且一个个匹配所有接下去的字母。如果有其中一个字母不同，我们从haystack的接下去一个字符位置重新开始匹配。
+
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        for(int i=0;;i++)
+            for(int j=0;;j++){
+                if(j==needle.size())
+                    return i;
+                if(i+j==haystack.size())
+                    return -1;
+                if (needle[j]!=haystack[i+j])
+                    break;
+
+            }
+    }
+};
+
+

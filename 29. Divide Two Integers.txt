@@ -1,0 +1,59 @@
+Divide two integers without using multiplication, division and mod operator.
+If it is overflow, return MAX_INT.
+Subscribe to see which companies asked this question
+<limits.h>中有INT_MAX和INT_MIN的宏定義可直接使用。
+或者自行定義宏
+#define INT_MAX 0x7fffffff
+#define INT_MIN 0x80000000
+INT_MAX = 2147483647
+INT_MIN = -2147483648
+這僅試用在没有限制範圍的情况下使用。
+否則同樣會出現其他連鎖的錯誤。
+
+比如19/3，只要分子比分母大，就可以除。
+19 比 3大， 比2个还3大，牛逼牛逼，比4个3大，你敢信？比8个3小。。
+那么19先减去4个3肯定没错，此时分子是19-4*3=7；结果是4，已经4个3了。
+然后再看7/3，7比1个3大，比2个3大，那么分子就是7-2*3 = 1，结果是2+刚才的4=6。
+然后1/3，比3小了，让你装逼。此时停止，结果是第一次的2+刚才的4=6.
+所以就是通过BIT位操作来看剩下的分子比几个分母大，正常乘法是1234567个这么测试，测1次就行了，但是用BIT是测很多次，每次1248个，最后相加。
+
+class Solution {
+public:
+    int divide(int dividend, int divisor) {
+        long long result=0;
+        int left=0;
+        bool sign=false;
+        if((dividend<0 &&divisor>0) || (dividend>0 &&divisor<0))
+            sign=true;
+        if (dividend == INT_MIN && divisor == -1) return INT_MAX;  
+        if (divisor == 1) return dividend;
+        
+        long long a=abs((double)dividend);
+        long long b=abs((double)divisor);
+        int c=1;
+        if(a<b)
+            return 0;
+        while(a>=b){
+            if(a==b){
+                result++;
+                break;
+            }
+            else{
+                while(a>b){
+                    b=b<<1;
+                    c=c<<1;
+                }
+                b=b>>1;
+                c=c>>1;
+                a=a-b;
+                b=abs((long long)divisor);
+                result=result+c;
+                c=1;
+            }
+                
+        }
+        if(sign==true)
+            result=-result;
+        return result;
+    }
+};

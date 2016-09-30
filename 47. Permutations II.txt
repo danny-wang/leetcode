@@ -1,0 +1,43 @@
+47. Permutations II
+Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+For example,
+[1,1,2] have the following unique permutations:
+[
+  [1,1,2],
+  [1,2,1],
+  [2,1,1]
+]
+关键是这里的判断条件  if(i > 0 && !signal[i-1] && nums[i] == nums[i-1]){ continue; }
+判断当前元素是不是和前一个相同，并且前一个数字没有被选择过。
+
+class Solution {
+public:
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        vector<vector<int>> result;
+        vector<int> path;
+        bool signal[nums.size()]={false};
+        sort(nums.begin(),nums.end());
+        helper(result,path,signal,nums);
+        return result;
+        
+    }
+    void helper(vector<vector<int>>& result, vector<int> path, bool signal[], vector<int>& nums){
+        if(path.size()==nums.size()){
+            result.push_back(path);
+            return;
+        }
+        for(int i=0;i<nums.size();i++){
+             if(i > 0 && !signal[i-1] && nums[i] == nums[i-1]){ continue; }
+            if(signal[i]==false){
+                signal[i]=true;
+                path.push_back(nums[i]);
+                helper(result,path,signal,nums);
+                path.pop_back();
+                signal[i]=false;
+            }
+            else
+                continue;
+        }
+        return;
+    }
+};
