@@ -1,0 +1,66 @@
+  1. 动态规划法
+      假设dp[ i ][ j ]的值为true，表示字符串s中下标从 i 到 j 的字符组成的子串是回文串。那么可以推出：
+    dp[ i ][ j ] = dp[ i + 1][ j - 1] && s[ i ] == s[ j ]。
+    这是一般的情况，由于需要依靠i+1, j -1，所以有可能 i + 1 = j -1, i +1 = (j - 1) -1，因此需要求出基准情况才能套用以上的公式：
+    a. i + 1 = j -1，即回文长度为1时，dp[ i ][ i ] = true;
+    b. i +1 = (j - 1) -1，即回文长度为2时，dp[ i ][ i + 1] = （s[ i ] == s[ i + 1]）。
+    有了以上分析就可以写出代码了。需要注意的是动态规划需要额外的O(n2)的空间。
+
+
+
+string longestPalindrome(string s) {
+
+        size_t n = s.length();
+        bool **dp = new bool*[n];
+        for (size_t i = 0; i < n; ++i)
+        {
+            dp[i] = new bool[n];
+        }
+                
+        //为基准情况赋值
+        int startPos = 0;
+        int max = 1;
+        for (size_t i = 0; i < n; ++i)
+        {
+            dp[i][i] = true;
+            if (i + 1 < n)
+            {
+				if (s[i] == s[i+1])
+				{
+					dp[i][i+1] = true;
+					startPos = i;
+					max = 2;
+				}
+				else dp[i][i+1] = false;
+            }
+        }
+        
+        //动规求解,前面已求len = 1, len = 2的情况
+        for (int len = 3; len <= n; ++len)
+        {
+            for (int i = 0; i < n - len + 1; ++i)
+            {
+                int j = i + len - 1;
+                
+				if (dp[i+1][j-1] && s[i] == s[j])
+				{
+					dp[i][j] = true;
+					int curLen = j - i + 1;
+					if (curLen > max)
+					{
+						startPos = i;
+						max = curLen;
+					}
+				}
+				else dp[i][j] = false;
+                
+            }
+        }
+        
+		//释放二维数组
+        for (size_t i = 0; i < n; ++i)
+           delete[] dp[i];
+        
+        delete[] dp;        
+		return s.substr(startPos,max);
+    }
