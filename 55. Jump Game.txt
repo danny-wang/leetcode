@@ -1,0 +1,61 @@
+55. Jump Game
+Given an array of non-negative integers, you are initially positioned at the first index of the array.
+Each element in the array represents your maximum jump length at that position.
+Determine if you are able to reach the last index.
+For example:
+A = [2,3,1,1,4], return true.
+A = [3,2,1,0,4], return false.
+解法一：设置一个布尔vector sign，sign[0] === true 表示 index === 0 这个位置能够到达，模拟每个位置的前进，最后判断 sign[lastIndex] 的值。毫无疑问这个方法超时了。Time Limit Exceeded 
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        int size=nums.size();
+        if(size==1)
+            return true;
+        vector<bool> sign(size,false);
+        if(nums[0]>0)
+            sign[0]=true;
+        for(int i=0; i<nums.size()-1;i++){
+            if(nums[i]>0&&sign[i]==true){
+            for(int y=1;y<=nums[i];y++){
+                if((i+y)<size ){
+                     sign[i+y]=true;
+                     int x=i+y;
+                     //cout<<"sign["<<x<<"]=true"<<endl;
+                }
+                    
+            }
+            }
+        }
+        cout<<"get out of for loop"<<endl;
+        
+        if(sign[size-1]==true){
+            cout<<"walk into sign[size-1]==true "<<endl;
+            return 1;
+        }
+        else
+            return 0;
+    }
+};
+解法２：
+贪心算法：每一步都确定能够跳跃的最大距离，如果最后一个元素在这个距离内则表示可达；
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        if(nums.size()==1)
+            return true;
+        int size=nums.size();
+        int max_range=0;
+        for(int i=0;i<size;i++){
+            if(nums[i]>max_range)
+                max_range=nums[i];
+            if(i+max_range+1>=size)
+                return true;
+            if(max_range==0)
+                return false;
+            max_range--;
+        }
+        return false;
+        
+    }
+};
