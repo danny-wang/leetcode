@@ -1,0 +1,32 @@
+Given a m x n matrix, if an element is 0, set its entire row and column to 0. Do it in place.
+
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        int m=matrix.size(); //colume numbers
+        int n=matrix[0].size(); //row numbers
+        bool col_flag[m]={false};
+        bool row_flag[n]={false};
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(matrix[i][j]==0){
+                    col_flag[i]=true;
+                    row_flag[j]=true;
+                }
+            }
+        }
+        for(int i=0;i<m;i++){
+            if(col_flag[i]){
+                for(int j=0;j<n;j++)
+                    matrix[i][j]=0;
+            }
+        }
+        for(int i=0;i<n;i++){
+            if(row_flag[i]){
+                for(int j=0;j<m;j++)
+                    matrix[j][i]=0;
+            }
+        }
+        
+    }
+};
