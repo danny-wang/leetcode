@@ -1,0 +1,49 @@
+90. Subsets II
+Given a collection of integers that might contain duplicates, nums, return all possible subsets.
+Note: The solution set must not contain duplicate subsets.
+For example,
+If nums = [1,2,2], a solution is:
+[
+  [2],
+  [1],
+  [1,2,2],
+  [2,2],
+  [1,2],
+  []
+]
+思路：先求出所有的子集，然后消除重复元素。
+
+class Solution {
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+         vector<vector<int>> results;
+        vector<int> path;
+        results.push_back(path);
+        for(int i=1;i<=nums.size();i++){
+            helper(results,path,0,i,nums);
+            path.clear();
+        }
+        for(auto &i :results){
+            sort(i.begin(),i.end());
+        }
+        sort(results.begin(),results.end());
+        auto ite_unique=unique(results.begin(),results.end());
+        results.erase(ite_unique,results.end());
+        return results;
+    }
+    void helper(vector<vector<int>> & results, vector<int> path, int start, int k,vector<int> nums){
+        if(path.size()==k)
+            results.push_back(path);
+        else if(path.size()<k){
+            for(int i=start; i<nums.size(); i++){
+                path.push_back(nums[i]);
+                helper(results, path,  i+1,k,nums);
+                path.pop_back();
+            }
+        }
+        else{
+            
+        }
+            
+    }
+};
