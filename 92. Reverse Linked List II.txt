@@ -1,0 +1,57 @@
+Reverse a linked list from position m to n. Do it in-place and in one-pass.
+For example:
+Given 1->2->3->4->5->NULL, m = 2 and n = 4,
+return 1->4->3->2->5->NULL.
+Note:
+Given m, n satisfy the following condition:
+1 ≤ m ≤ n ≤ length of list.
+Subscribe to see which companies asked this question
+
+【分析】
+思路1：
+前m-1个不变，从第m+1个到第n个，依次删除，用尾插法插入到第m-1个节点后面。
+
+ 第一步把4节点删除放入2节点之后
+
+ 第二步把5节点删除放入2节点之后
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        ListNode *p,*q,*m_loc_ptr,*pp,*qq;
+        p=head;
+        ListNode *header=new ListNode(0);
+        header->next=head;
+        pp=header;
+        for(int i=0;i<m-1;i++){     //pp points the m-1 position
+            pp=pp->next;
+        }
+        
+        
+        for(int i=0;i<m-1;i++){     //p points the m position
+            p=p->next;
+        }
+        q=p->next;   //q points the m+1 position
+        int pos=m-1;
+        for(int i=0; i<n-m;i++){     //from m+1 node to n node
+            //delete m+1 node and use pointer m_loc_ptr to point it
+            m_loc_ptr=q;
+            p->next=q->next;
+            //add p to m location
+            qq=pp->next;
+            pp->next=m_loc_ptr;
+            m_loc_ptr->next=qq;
+            q=p->next;   //find next node which needs to move    
+        }
+        return header->next;
+        
+    }
+};
