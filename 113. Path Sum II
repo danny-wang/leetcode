@@ -1,0 +1,58 @@
+113. Path Sum II
+Given a binary tree and a sum, find all root-to-leaf paths where each path's sum equals the given sum.
+For example:
+Given the below binary tree and sum = 22,
+              5
+             / \
+            4   8
+           /   / \
+          11  13  4
+         /  \    / \
+        7    2  5   1
+
+return
+[
+   [5,4,11,2],
+   [5,8,4,5]
+]
+思路： 在每一条路径上维护一个vector<int>, 当到达叶节点并且sum=路径上节点的val和的时候，将这个vector加入结果队列。
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> pathSum(TreeNode* root, int sum) {
+        vector<vector<int>> result;
+        if(!root)
+            return result;
+        bool has_path=false;
+        vector<int> current_path;
+        helper(root, sum, 0, has_path, result,current_path);
+        return result;
+    }
+    void helper(TreeNode* p, int sum, int current_sum, bool& has_path,vector<vector<int>>& result, vector<int> current_path){
+        current_path.push_back(p->val);
+        current_sum=current_sum+p->val;
+        if((!(p->left))&&(!(p->right))){
+            if(sum==current_sum){
+                has_path=true;
+                result.push_back(current_path);
+            }
+                
+        }
+        else{
+            if(p->left){
+                helper(p->left,sum, current_sum, has_path,result,current_path);
+            }
+            if(p->right){
+                helper(p->right,sum, current_sum, has_path,result,current_path);
+            }
+        }
+    }
+};
