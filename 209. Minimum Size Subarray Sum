@@ -1,0 +1,34 @@
+Given an array of n positive integers and a positive integer s, find the minimal length of a contiguous subarray of which the sum ≥ s. If there isn't one, return 0 instead.
+For example, given the array [2,3,1,2,4,3] and s = 7,
+the subarray [4,3] has the minimal length under the problem constraint.
+
+思路：从每一个位置出发，计算sum到达s的最小距离，一旦出现一个更小的就更新当前最小距离。
+class Solution {
+public:
+    int minSubArrayLen(int s, vector<int>& nums) {
+        int min_length=nums.size()+1;
+        for(int i=0;i<nums.size();i++)
+            length(i,1,nums[i], s,min_length, nums);
+        if(min_length==nums.size()+1)
+            return 0;
+        else
+            return min_length;
+    }
+    /** i: index of the start position;
+     * j: current length;
+     * sum: sum;
+     * s: object sum;
+     * min_length: current minimal length;
+     * vector_length: vector length;
+    **/
+    void length(int i, int j, int sum, int s, int& min_length, vector<int>& nums ){
+        if(sum>=s){
+            if(j<min_length)
+                min_length=j;
+        }
+        else if(i+1<nums.size()) //只有之后有新值可以加入的时候才需要考虑
+            length(i+1,j+1,sum+nums[i+1], s, min_length,nums );
+        else
+            ;
+    }
+};
