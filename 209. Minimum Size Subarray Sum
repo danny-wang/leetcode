@@ -32,3 +32,25 @@ public:
             ;
     }
 };
+思路二：这是一个滑动窗口的问题。两个指针, start 和end, end向后走,直到 sum 大于 s. 然后start向后, 直到sum 小于s. 同时更新 min值.
+class Solution {
+public:
+    int minSubArrayLen(int s, vector<int>& nums) {
+        int l=0;
+        int r=0;
+        int min_length=nums.size()+1;
+        int sum=0;
+        while(l<nums.size()&& r<nums.size()){
+            while(sum<s && r<nums.size()){
+                sum=sum+nums[r];
+                r++;
+            }
+            while(sum>=s && l<r){
+                min_length=std::min(min_length,r-l);
+                sum-=nums[l++];
+            }
+        }
+        return min_length==nums.size()+1? 0: min_length;
+    }
+    
+};
