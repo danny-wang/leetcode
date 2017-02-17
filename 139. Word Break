@@ -1,0 +1,35 @@
+Given a non-empty string s and a dictionary wordDict containing a list of non-empty words, determine if s can be segmented into a space-separated sequence of one or more dictionary words. You may assume the dictionary does not contain duplicate words.
+For example, given
+s = "leetcode",
+dict = ["leet", "code"].
+Return true because "leetcode" can be segmented as "leet code".
+解题思路
+  ● 动态规划是一种解决问题的思想 - 大规模问题的结果，是由小规模问题的结果运算得来的
+  ● 动态规划不等同于递归，动态规划思想可以由递归来实现
+  ● DP初始化时一般要有个1或者true
+  ● 本题属于序列型动态规划 - Sequence DP
+  ● result[i]表示前i个字符能不能被dict完美划分
+  ● 判断result[i]，则需要遍历0~i中是否存在一个j，使得result[j]=true而且j+1~i存在于dict中
+  ● 本题还有一个值得注意的地方，一定要考虑到单词长度是有上限的！，所以每次不需要遍历0~i而是x~i(i-x为单词最大长度)
+
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        vector<bool> result(s.size(),false);
+        for(int i=0;i<s.size();i++){
+            if(find(wordDict.begin(),wordDict.end(),s.substr(0,i+1))!=wordDict.end()){
+                result[i]=true;
+                continue;
+            }
+            else{
+                for(int j=0;j<i;j++){
+                    if(result[j]==true && find(wordDict.begin(),wordDict.end(),s.substr(j+1,i-j))!=wordDict.end() ){
+                        result[i]=true;
+                        break;
+                    }
+                }
+            }
+        }
+        return result[s.size()-1];
+    }
+};
