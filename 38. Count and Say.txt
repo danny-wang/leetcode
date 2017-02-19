@@ -1,61 +1,48 @@
-     //clear()，这个名字让很多人想当然地认为它会清除流的内容。 
-    //实际上，它并不清空任何内容，它只是重置了流的状态标志而已！
+//clear()，这个名字让很多人想当然地认为它会清除流的内容。 
+//实际上，它并不清空任何内容，它只是重置了流的状态标志而已！
     stream.clear();   
-     // 去掉下面这行注释，清空stringstream的缓冲，每次循环内存消耗将不再增加!
-     //stream.str("");      
+// 去掉下面这行注释，清空stringstream的缓冲，每次循环内存消耗将不再增加!
+//stream.str("");    
+  
+描述：
+The count-and-say sequence is the sequence of integers beginning as follows:
+1, 11, 21, 1211, 111221, ...
+1 is read off as "one 1" or 11.
+11 is read off as "two 1s" or 21.
+21 is read off as "one 2, then one 1" or 1211.
+Given an integer n, generate the nth sequence.
+Note: The sequence of integers will be represented as a string.
+
 
 class Solution {
 public:
     string countAndSay(int n) {
-        string medium="1";
-        if(n==1)
+        string medium="1";   
+        if(n==1)   //初始状态是一个1
             return "1";
-        for(int i=1;i<n;i++){
+        for(int i=1;i<n;i++){     //接着处理n-1次
             medium=convert(medium);
         }
-        stringstream sstr;
-        sstr<<medium;
-        string a;
-        sstr>>a;
-        return a;
+        return medium;
 
     }
     string convert(string n){
-        stringstream sstr;
-        sstr<<n;
-        string str;
-        sstr>>str;
-        cout<<"str="<<str<<endl;
-        sstr.str("");
-        auto iter=str.begin();
-        auto iter2=str.end();
+        auto iter=n.begin();
+        auto iter2=n.end();
         int count1 =1;
         string b="";
         stringstream sstr3;
-
-        for(;iter!=iter2;iter++){
-            if(*iter!=*(iter+1)){
-                stringstream sstr2;
-                sstr2<<(*iter);
-                int a=0;
-                sstr2>>a;
-                cout<<"a="<<a<<endl;
-
-                sstr3<<count1;
-                sstr3<<a;
-
-                count1=1;
+        for(;iter!=iter2;iter++){ 
+            if(*iter!=*(iter+1)){    //判断是否与后一个字母相同
+                sstr3<<count1;      //输出出现次数
+                sstr3<<*iter;      //输出出现的字母
+                count1=1;         //重置计数
             }
             else{
-
-                count1++;
-
-
+                count1++;          //与后一个字母相同，只是累加计数
             }
         }
         sstr3>>b;
-        cout<<"b="<<b<<endl;
-        cout<<"sstr"<<sstr3.str()<<endl;
         return b;
 
     }
