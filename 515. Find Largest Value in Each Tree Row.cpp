@@ -1,5 +1,6 @@
 //You need to find the largest value in each row of a binary tree.
-//思路：通过动态规划将每一层的所有Node指针存在一个 vector<vector<TreeNode*>>，然后计算其中每一个vector的最大值，保存起来即是解。
+//思路 one：通过动态规划将每一层的所有Node指针存在一个 vector<vector<TreeNode*>>，然后计算其中每一个vector的最大值，保存起来即是解。
+//better: 思路 two：这道题让我们找二叉树每行的最大的结点值，那么实际上最直接的方法就是用层序遍历，然后在每一层中找到最大值，加入结果res中即可
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -51,5 +52,32 @@ public:
         }
         else
             return;
+    }
+};
+
+class Solution {
+public:
+    vector<int> largestValues(TreeNode* root) {
+        vector<int> result;
+        if(!root)
+            return result;
+        queue<TreeNode*> que;
+        que.push(root);
+        while(!que.empty()){
+            int max=INT_MIN;
+            int size=que.size();
+            for(int i=0;i<size;i++){
+                TreeNode* ptr= que.front();
+                if(ptr->val> max)
+                    max=ptr->val;
+                if(ptr->left)
+                    que.push(ptr->left);
+                if(ptr->right)
+                    que.push(ptr->right);
+                que.pop();
+            }
+            result.push_back(max);
+        }
+        return result;
     }
 };
