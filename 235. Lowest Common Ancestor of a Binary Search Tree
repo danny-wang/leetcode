@@ -1,0 +1,50 @@
+Given a binary search tree (BST), find the lowest common ancestor (LCA) of two given nodes in the BST.
+According to the definition of LCA on Wikipedia: “The lowest common ancestor is defined between two nodes v and w as the lowest node in T that has both v and w as descendants (where we allow a node to be a descendant of itself).”
+        _______6______
+       /              \
+    ___2__          ___8__
+   /      \        /      \
+   0      _4       7       9
+         /  \
+         3   5
+
+For example, the lowest common ancestor (LCA) of nodes 2 and 8 is 6. Another example is LCA of nodes 2 and 4 is 2, since a node can be a descendant of itself according to the LCA definition.
+
+思路： 这是一个二叉搜索树，要找两个节点的共同父节点，那这个父节点一定大于等于这两个数中小的那个，并且小于等于两个树中大的那个。
+使用动态规划的办法：
+1. 如果根节点大于小的节点，并且小于大的节点，那它就是他们共同的根节点。
+2. 如果根节点等于两个节点中的任何一个，那它也就是他们共同的根节点。
+3. 如果根节点同时小于这两个节点，说明这两个节点都在根节点的右子树上，讨论根节点的右孩子
+4. 如果根节点同时大于这两个节点，说明这两个节点都在根节点的左子树上，讨论根节点的左孩子
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(!root)
+            return root;
+        TreeNode* result=nullptr;
+        if(p->val < q->val)
+            result=helper(root, p, q);
+        else
+            result=helper(root, q, p);
+        return result;
+    }
+    TreeNode* helper(TreeNode* ptr, TreeNode* p, TreeNode* q){
+        if((ptr->val > p->val)&&(ptr->val < q->val))
+            return ptr;
+        else if((ptr->val == p->val) || (ptr->val == q->val))
+            return ptr;
+        else if(ptr->val < p->val)
+            return helper(ptr->right, p, q);
+        else
+            return helper(ptr->left, p, q);
+    }
+};
