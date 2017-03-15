@@ -37,6 +37,6 @@ public:
     static bool less_second(const string & m1, const string & m2) {
         string a=m1+m2;
         string b=m2+m1;
-        return a > b; //升序
+        return a > b; //降序
     }
 };
