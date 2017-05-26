@@ -13,7 +13,7 @@ solution.reset();
 // Returns the random shuffling of array [1,2,3].
 solution.shuffle();
 
-思路: 在随机产生一个序列的时候, 遍历每一个元素, 并且随机一个从他开始的位置与这个位置交换, 这样任意一个元素随机到任意一个位置的概率都是1/n!.
+思路: 在随机产生一个序列的时候, 遍历每一个元素, 并且随机一个位置与这个位置交换, 这样任意一个元素随机到任意一个位置的概率都是1/n!.
 
 class Solution {
 public:
@@ -38,6 +38,55 @@ public:
     }
 private:
     vector<int> origin_data;
+};
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(nums);
+ * vector<int> param_1 = obj.reset();
+ * vector<int> param_2 = obj.shuffle();
+ */
+//思路二：鱼塘抽样的方法，先求可能出现在第一位的，在求第二位的.......
+class Solution {
+public:
+    Solution(vector<int> nums):old_data(nums) {
+        data.swap(nums);
+    }
+    
+    /** Resets the array to its original configuration and return it. */
+    vector<int> reset() {
+        int size=data.size();
+        for(int i=0;i<size;i++)
+            data[i]=old_data[i];
+        return data;
+    }
+    
+    /** Returns a random shuffling of the array. */
+    vector<int> shuffle() {
+        multiset<int> un_set;
+        for(auto i : data)
+            un_set.insert(i);
+        int size=data.size();
+        for(int i=0;i<size;i++){
+            cout<<"~~~"<<endl;
+            int count=1;
+            int temp=0;
+            auto del_ite=un_set.begin();
+            for(auto ite=un_set.begin();ite!=un_set.end();ite++,count++){
+                if(rand()%count==0){
+                    temp=(*ite);
+                    //cout<<"temp="<<temp<<endl;
+                    del_ite=ite;
+                }
+            }
+            un_set.erase(del_ite);
+            data[i]=temp;
+        }
+        return data;
+    }
+private:
+    vector<int> data;
+    vector<int> old_data;
 };
 
 /**
